@@ -6,7 +6,8 @@ const alertSchema = new mongoose.Schema({
     message: { type: String },
     timestamp: { type: Date } // echivalent pentru LocalDateTime
 }, {
-    collection: 'alerts' // specificăm colecția, similar cu @Document(collection = "alerts")
+    collection: 'alerts'
+  //   strict: false // specificăm colecția, similar cu @Document(collection = "alerts")
 });
 
 module.exports = mongoose.model('Alert', alertSchema);
