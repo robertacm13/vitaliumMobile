@@ -23,11 +23,14 @@ const alertRoutes = require('./routes/alert.routes');
 const doctorRoutes = require('./routes/doctor.routes');
 const recommendationRoutes = require('./routes/recommendation.routes');
 const sensorRoutes = require('./routes/sensor.routes');
+const authRoutes = require('./routes/auth.routes');
 app.use('/api/patient', patientRoutes);
 app.use('/api/alert', alertRoutes); // TODO: schimbați asta să fie altceva, nu știu ce
 app.use('/api/doctor', doctorRoutes);
 app.use('/api/recommendation',recommendationRoutes);
 app.use('/api/sensor',sensorRoutes); // TODO: schimbați asta să fie altceva, nu știu ce
+app.use('/api', authRoutes); // TODO: schimbați asta să fie altceva, nu știu ce
+
 const PORT = process.env.PORT || 8083;
 app.listen(PORT, () => {
   console.log(`✅ Server is running on port ${PORT}`);
