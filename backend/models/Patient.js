@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
 const patientSchema = new mongoose.Schema({
-    _id: { type: String }, // @Id și @Field("_id")
+   // _id: { type: String }, // @Id și @Field("_id")
     first_name: { type: String, required: true }, // @Field("first_name")
     last_name: { type: String, required: true },  // @Field("last_name")
-    cnp: {
+    CNP: {
         type: String,
         set: v => v ? v.toLowerCase() : null, // transformă la litere mici sau null dacă e falsy
         default: null
@@ -19,5 +19,8 @@ const patientSchema = new mongoose.Schema({
     dateBirth: { type: Date },         // @Field("dateBirth")
     job: { type: String }
 }, {
-    collection: 'patients'
+    collection: 'patients',
+    strict: false
 });
+
+module.exports = mongoose.model('Patient', patientSchema);

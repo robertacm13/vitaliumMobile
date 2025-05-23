@@ -1,4 +1,5 @@
 const Patient = require('../models/Patient');
+const mongoose = require('mongoose');
 
 // GET /api/patient/ => toți pacienții
 exports.getAllPatients = async (req, res) => {
