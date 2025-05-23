@@ -1,12 +1,6 @@
-const express = require('express');
-const cors = require('cors');
-const app = express();
+const mongoose = require('mongoose');
+require('dotenv').config();
 
-app.use(cors());
-app.use(express.json());
-
-app.get('/ping', (req, res) => {
-  res.json({ message: 'pong' });
-});
-
-app.listen(3001, () => console.log('Server running on port 3001'));
+mongoose.connect(process.env.MONGO_URI)
+    .then(() => console.log("✅ Connected to MongoDB"))
+    .catch(err => console.error("❌ Mongo error:", err));
