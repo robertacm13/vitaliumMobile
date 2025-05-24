@@ -20,3 +20,29 @@ exports.getAllAlerts = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+
+
+
+
+
+
+exports.getAlertsByPatientId = async (req, res) => {
+    try {
+        const patientId = req.params.patientId;
+        
+        // Validate patient ID
+        if (!patientId) {
+            return res.status(400).json({ error: 'Patient ID is required' });
+        }
+        
+        // Find alerts for this patient
+        const alerts = await Alert.find({ patient_id: patientId });
+        
+        console.log(`Found ${alerts.length} alerts for patient ${patientId}`);
+        
+        res.status(200).json(alerts);
+    } catch (err) {
+        console.error('Error in getAlertsByPatientId:', err);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
