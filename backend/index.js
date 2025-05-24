@@ -24,6 +24,8 @@ const doctorRoutes = require('./routes/doctor.routes');
 const recommendationRoutes = require('./routes/recommendation.routes');
 const sensorRoutes = require('./routes/sensor.routes');
 const authRoutes = require('./routes/auth.routes');
+// Adaugă acest middleware înainte de rutele tale
+
 app.use('/api/patient', patientRoutes);
 app.use('/api/alert', alertRoutes); // TODO: schimbați asta să fie altceva, nu știu ce
 app.use('/api/doctor', doctorRoutes);

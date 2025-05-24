@@ -4,11 +4,12 @@ const controller = require('../controllers/patient.controller');
 const controllerAlerts = require('../controllers/alert.controller');
 
 router.get('/', controller.getAllPatients);
-router.get('/:id', controller.getPatientById);
-router.post('/', controller.createPatient);
-router.put('/:id', controller.updatePatient);
-router.delete('/:id', controller.deletePatient);
+//router.get('/:id', controller.getPatientById);
+//router.post('/', controller.createPatient);
 
+//router.put('/:id', controller.updatePatient);
+//router.delete('/:id', controller.deletePatient);
 
+router.get('/:id/doctor', controller.getPatientDoctor);
 
 module.exports = router;
