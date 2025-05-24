@@ -96,41 +96,106 @@ exports.getPatientDoctor = async (req, res) => {
     }
 };
 
-
- /*// GET /api/patient/:id => un pacient
-exports.getPatientById = async (req, res) => {
+// GET /api/patient/email?email=example@gmail.com => un pacient
+exports.getPatientByEmailQuery = async (req, res) => {
     try {
-        const patient = await Patient.findById(req.params.id);
+        const email = req.query.email;
+        console.log(`Căutăm pacient cu emailul (din query): ${email}`);
+        
+        // Verifică dacă email-ul este furnizat
+        if (!email) {
+            return res.status(400).json({ error: 'Email parameter is required' });
+        }
+        
+        const Patient = require('../models/Patient'); // Asigură-te că modelul este importat
+        const patient = await Patient.findOne({ email: email });
+        
         if (!patient) {
+            console.log(`Nu s-a găsit niciun pacient cu emailul: ${email}`);
             return res.status(404).json({ error: 'Patient not found' });
         }
+        
+        console.log(`Pacient găsit:`, patient);
         res.json(patient);
     } catch (err) {
-        console.error('Error in getPatientById:', err);
-        res.status(500).json({ error: 'Internal server error' });
+        console.error('Error in getPatientByEmailQuery:', err);
+        res.status(500).json({ error: 'Internal server error', details: err.message });
     }
 };
 
+
+
+// POST /api/patient/ => adaugă un nou pacient
 // POST /api/patient/ => adaugă un nou pacient
 exports.createPatient = async (req, res) => {
     try {
-        const newPatient = new Patient(req.body);
-        const saved = await newPatient.save();
-        res.status(201).json(saved);
+        console.log('Încercăm să creăm un nou pacient cu datele:', req.body);
+        
+        // Verificăm dacă req.body este gol sau undefined
+        if (!req.body || Object.keys(req.body).length === 0) {
+            console.error('Body-ul cererii este gol sau invalid');
+            return res.status(400).json({ error: 'Date lipsă. Te rugăm să furnizezi datele pacientului.' });
+        }
+        
+        // Verificăm dacă conține câmpurile obligatorii
+        if (!req.body.first_name || !req.body.last_name) {
+            console.error('Lipsesc câmpuri obligatorii');
+            return res.status(400).json({ error: 'first_name și last_name sunt obligatorii' });
+        }
+        
+        // Eliminăm _id dacă există, pentru a lăsa MongoDB să genereze unul automat
+        const patientData = { ...req.body };
+        if (patientData._id) {
+            delete patientData._id;
+        }
+        
+        // Creăm un nou obiect Patient
+        const newPatient = new Patient(patientData);
+        console.log('Obiect pacient creat:', newPatient);
+        
+        // Salvăm pacientul în baza de date
+        try {
+            const saved = await newPatient.save();
+            console.log('Pacient salvat cu succes:', saved);
+            return res.status(201).json(saved);
+        } catch (saveError) {
+            console.error('Eroare la salvare:', saveError);
+            if (saveError.name === 'ValidationError') {
+                return res.status(400).json({ error: 'Eroare de validare', details: saveError.message });
+            } else {
+                return res.status(500).json({ error: 'Eroare la salvarea pacientului', details: saveError.message });
+            }
+        }
     } catch (err) {
         console.error('Error in createPatient:', err);
-        res.status(400).json({ error: err.message });
+        
+        // Afișăm mai multe detalii despre eroare
+        if (err.name === 'ValidationError') {
+            const validationErrors = {};
+            Object.keys(err.errors).forEach(key => {
+                validationErrors[key] = err.errors[key].message;
+                console.error(`Eroare validare: ${key}:`, err.errors[key].message);
+            });
+            return res.status(400).json({ error: 'Eroare de validare', details: validationErrors });
+        }
+        
+        res.status(500).json({ error: 'Eroare server', details: err.message });
     }
 };
-*/
+
 // PUT /api/patient/:id => modifică pacientul
 exports.updatePatient = async (req, res) => {
     try {
-        
         const patientId = req.params.id;
         console.log('Încercăm să actualizăm pacientul cu ID:', patientId);
         console.log('Date primite:', req.body);
         
+        // Verifică dacă ID-ul este valid
+        if (!mongoose.Types.ObjectId.isValid(patientId)) {
+            return res.status(400).json({ error: 'Invalid patient ID format' });
+        }
+        
+        // Restul codului rămâne neschimbat
         // Încearcă diferite metode de actualizare
         let updated = null;
         

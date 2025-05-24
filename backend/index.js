@@ -6,7 +6,23 @@ const cors = require('cors');
 
 const app = express();
 app.use(cors());
+app.use(cors({
+  origin: '*', // În producție, specifică doar originile permise
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
+
+app.use((req, res, next) => {
+  const timestamp = new Date().toISOString();
+  console.log(`${timestamp} - ${req.method} ${req.url}`);
+  console.log('Headers:', req.headers);
+  if (req.body && Object.keys(req.body).length > 0) {
+    console.log('Body:', req.body);
+  }
+  next();
+});
+
 
 // În index.js, adaugă aceste linii după conectare
 mongoose.connect(process.env.MONGODB_URI)

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const patientSchema = new mongoose.Schema({
-   // _id: { type: String }, // @Id și @Field("_id")
+    _id: { type: String, default: () => new mongoose.Types.ObjectId().toString() }, // Auto-generare ID
     first_name: { type: String, required: true }, // @Field("first_name")
     last_name: { type: String, required: true },  // @Field("last_name")
     CNP: {
