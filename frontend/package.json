@@ -10,8 +10,12 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-community/masked-view": "^0.1.11",
+    "@react-navigation/stack": "^7.3.2",
     "react": "19.0.0",
-    "react-native": "0.79.2"
+    "react-native": "0.79.2",
+    "react-native-gesture-handler": "^2.25.0",
+    "react-native-screens": "^4.10.0"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
@@ -23,7 +27,7 @@
     "@react-native/babel-preset": "0.79.2",
     "@react-native/eslint-config": "0.79.2",
     "@react-native/metro-config": "0.79.2",
-    "@react-native/typescript-config": "0.79.2",
+    "@react-native/typescript-config": "^0.79.2",
     "@types/jest": "^29.5.13",
     "@types/react": "^19.0.0",
     "@types/react-test-renderer": "^19.0.0",
